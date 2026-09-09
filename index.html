@@ -6,6 +6,7 @@
 <title>Catálogo ACDelco — Estoque Completo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
     --navy: #16233f;
@@ -54,6 +55,12 @@
     transition: transform .12s ease, box-shadow .12s ease;
   }
   .print-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(201,162,39,.4); }
+  .excel-btn {
+    background: #1e7a34; color: white; border: none; border-radius: 8px; padding: 9px 16px;
+    font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 7px;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .excel-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(30,122,52,.4); }
 
   .hero {
     background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 55%, #2a4a86 100%);
@@ -193,12 +200,15 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
     Baixar PDF
   </button>
+  <button class="excel-btn" onclick="exportExcel()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13l2.5 5L13 13M13 13l2.5 5L18 13"/></svg>
+    Exportar Excel
+  </button>
 </div>
 
 <div class="hero">
   <div class="hero-inner">
     <h1>Todo o estoque ACDelco — Grupo Jorlan</h1>
-    <p>Consolidado do estoque atual cruzado com a planilha de modalidades ACDelco e o portfólio mensal ACDelco Multimarcas (aplicações, categoria de giro e equivalências com concorrentes). Fotos, modalidade e aplicações veiculares por item.</p>
     <div class="hero-stats">
       <div class="hero-stat"><strong>245</strong><span>Itens ACDelco no estoque</span></div>
       <div class="hero-stat"><strong>240</strong><span>Em estoque</span></div>
@@ -5829,6 +5839,32 @@
   function prepareAndPrint() {
     document.querySelectorAll('.app-details').forEach(d => d.open = true);
     setTimeout(() => window.print(), 120);
+  }
+
+  function exportExcel() {
+    const rows = [];
+    document.querySelectorAll('.card').forEach(card => {
+      const codigo = card.querySelector('.card-code').textContent.trim();
+      const descricao = card.querySelector('.card-title').textContent.trim();
+      const linha = card.dataset.linha;
+      const modalidade = card.querySelector('.tag-modalidade') ? card.querySelector('.tag-modalidade').textContent.trim() : '';
+      const disponivel = card.dataset.disp === '1' ? 'Em estoque' : 'Indisponível';
+      rows.push({
+        'Código': codigo,
+        'Descrição': descricao,
+        'Linha': linha,
+        'Modalidade': modalidade,
+        'Estoque': disponivel,
+        'Preço de Tabela': '',
+        '% Desconto': '',
+        'Valor com Desconto': ''
+      });
+    });
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = [{wch:12},{wch:45},{wch:22},{wch:14},{wch:14},{wch:14},{wch:12},{wch:16}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Catálogo ACDelco');
+    XLSX.writeFile(wb, 'Catalogo_ACDelco_Precos.xlsx');
   }
 </script>
 
