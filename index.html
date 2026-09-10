@@ -9,10 +9,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
-    --navy: #16233f;
-    --navy2: #1f3864;
-    --gold: #c9a227;
-    --gold-light: #e8d9a0;
+    --navy: #14357a;
+    --navy2: #1e4aa0;
+    --gold: #e31e26;
+    --gold-light: #f8c0c3;
     --bg: #f5f6f8;
     --card: #ffffff;
     --text: #1a1e2b;
@@ -37,6 +37,14 @@
   .topbar .brand { display: flex; flex-direction: column; margin-right: auto; }
   .topbar .brand strong { font-family: 'Fraunces', serif; font-size: 20px; letter-spacing: .2px; }
   .topbar .brand span { font-size: 12px; color: var(--gold-light); }
+  .brand-row { display: flex; align-items: center; gap: 9px; }
+  .acdelco-badge {
+    background: var(--gold); color: white; font-family: Arial, Helvetica, sans-serif;
+    font-weight: 800; font-size: 13px; letter-spacing: .01em; padding: 4px 8px 3px;
+    border-radius: 4px; border: 2px solid white; line-height: 1; box-shadow: 0 2px 5px rgba(0,0,0,.25);
+  }
+  .acdelco-badge em { font-style: normal; font-weight: 700; }
+  .acdelco-logo { height: 26px; width: auto; background: white; padding: 4px 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,.25); }
   .search-box {
     display: flex; align-items: center; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
     border-radius: 8px; padding: 7px 12px; gap: 8px; width: 300px;
@@ -50,11 +58,11 @@
     user-select: none;
   }
   .print-btn {
-    background: var(--gold); color: var(--navy); border: none; border-radius: 8px; padding: 9px 16px;
+    background: var(--gold); color: white; border: none; border-radius: 8px; padding: 9px 16px;
     font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 7px;
     transition: transform .12s ease, box-shadow .12s ease;
   }
-  .print-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(201,162,39,.4); }
+  .print-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(208,2,27,.4); }
   .excel-btn {
     background: #1e7a34; color: white; border: none; border-radius: 8px; padding: 9px 16px;
     font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; gap: 7px;
@@ -193,8 +201,13 @@
 
 <div class="topbar">
   <div class="brand">
-    <strong>Catálogo ACDelco</strong>
-    <span>Estoque completo — Grupo Jorlan</span>
+    <div class="brand-row">
+      <img class="acdelco-logo" src="https://www.acdelco.com.br/content/dam/gmparts/sa/br/pt/sitemap/03-images/logo-150px-2-1.svg" alt="ACDelco"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';">
+      <span class="acdelco-badge" style="display:none;">AC<em>Delco</em></span>
+      <strong>Catálogo</strong>
+    </div>
+    <span>Grupo Jorlan</span>
   </div>
   <div class="search-box">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -215,7 +228,7 @@
 
 <div class="hero">
   <div class="hero-inner">
-    <h1>Todo o estoque ACDelco — Grupo Jorlan</h1>
+    <h1>Catálogo ACDelco - Grupo Jorlan</h1>
     <div class="hero-stats">
       <div class="hero-stat"><strong>245</strong><span>Itens ACDelco no estoque</span></div>
       <div class="hero-stat"><strong>240</strong><span>Em estoque</span></div>
