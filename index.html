@@ -13699,7 +13699,13 @@
       refreshVisibility();
     });
   });
-  document.getElementById('searchInput').addEventListener('input', refreshVisibility);
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    if (e.target.value.trim()) {
+      chips.forEach(c => c.classList.remove('active'));
+      document.querySelector('.chip[data-filter="all"]').classList.add('active');
+    }
+    refreshVisibility();
+  });
   hideIndisponivel.addEventListener('change', refreshVisibility);
 
   function prepareAndPrint() {
