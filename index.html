@@ -6068,7 +6068,7 @@
 
 <script>
   // ---- Carrega preços de precos.xlsx (arquivo separado no mesmo repositório) ----
-  const PRICE_FILE = 'precos.xlsx';
+  const PRICE_FILE_CANDIDATES = ['precos.xlsx', 'Precos.xlsx', 'PRECOS.xlsx', 'Precos.XLSX', 'precos.XLSX'];
 
   function fmtBRL(v) {
     return 'R$ ' + Number(v).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -6086,8 +6086,14 @@
 
   async function loadPrices() {
     try {
-      const res = await fetch(PRICE_FILE, {cache: 'no-store'});
-      if (!res.ok) throw new Error('precos.xlsx não encontrado (' + res.status + ')');
+      let res = null;
+      for (const candidate of PRICE_FILE_CANDIDATES) {
+        try {
+          const r = await fetch(candidate, {cache: 'no-store'});
+          if (r.ok) { res = r; break; }
+        } catch (e) { /* tenta o próximo */ }
+      }
+      if (!res) throw new Error('precos.xlsx não encontrado (tentei: ' + PRICE_FILE_CANDIDATES.join(', ') + ')');
       const buf = await res.arrayBuffer();
       const wb = XLSX.read(buf, {type: 'array'});
       const sheet = wb.Sheets[wb.SheetNames[0]];
